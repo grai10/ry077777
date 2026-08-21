@@ -1,18 +1,73 @@
 --[[
     ========================================================================
     🔥 UNIVERSAL AI DUMPER & REMOTE SPY TOOL (VALEN HUB STYLE)
-    - เครื่องมือ Dump ข้อมูล Map, Remote, และ Objects สำหรับส่งให้ AI เขียนโปร
-    - รองรับตัวรันทุกตัว: Delta, Fluxus, Codex, Arceus X, Wave, Solara, ฯลฯ
+    🔒 PRIVATE ACCESS ONLY (ระบบป้องกันคนอื่นใช้งาน)
     ========================================================================
 ]]
 
-local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- =========================================================================
+-- [🔒 CONFIG: ตั้งค่าการอนุญาตใช้งาน (WHITELIST)]
+-- =========================================================================
+local SECURITY_CONFIG = {
+    -- วิธีที่ 1: ใส่ Roblox Username ของคุณ (ใส่เพิ่มได้หลายชื่อ)
+    AllowedUsernames = {
+        ["grai10"] = true,
+        ["kaix9"] = true,
+        -- ["ชื่อไอดีของคุณ"] = true,
+    },
+    
+    -- วิธีที่ 2: ใส่ Roblox UserId ของคุณ (แนะนำ เพราะปลอดภัยที่สุด)
+    AllowedUserIds = {
+        [0] = true, -- เปลี่ยนเลข 0 เป็น UserId ของคุณ (ดูได้จากโปรไฟล์ Roblox)
+    },
+    
+    -- วิธีที่ 3: ระบบรหัสผ่านสำรอง (เผื่อเล่นไอดีอื่นแล้วยังไม่ได้ Whitelist)
+    MasterKey = "LO_SECRET_2026", -- รหัสผ่านที่คุณตั้งเอง
+    
+    -- ข้อความเมื่อถูกปฏิเสธการเข้าถึง
+    KickMessage = "🔒 ไม่อนุญาตให้ใช้งาน: สคริปต์นี้เป็นของส่วนบุคคล (Private Script)"
+}
+
+-- ระบบตรวจสิทธิ์ (Security Check)
+local function checkAccess()
+    -- ตรวจสอบ Username
+    if SECURITY_CONFIG.AllowedUsernames[LocalPlayer.Name] then
+        return true
+    end
+    
+    -- ตรวจสอบ UserId
+    if SECURITY_CONFIG.AllowedUserIds[LocalPlayer.UserId] then
+        return true
+    end
+    
+    -- ถ้ามีตัวแปร _G.ScriptKey ตรงกับ MasterKey
+    if _G.ScriptKey and _G.ScriptKey == SECURITY_CONFIG.MasterKey then
+        return true
+    end
+    
+    return false
+end
+
+if not checkAccess() then
+    warn("❌ ACCESS DENIED: คุณไม่มีสิทธิ์ใช้งานสคริปต์นี้!")
+    if LocalPlayer then
+        LocalPlayer:Kick(SECURITY_CONFIG.KickMessage)
+    end
+    return
+end
+
+-- =========================================================================
+-- [เริ่มต้นโหลดเครื่องมือหลักหลังจากผ่านระบบ Whitelist]
+-- =========================================================================
+
+local HttpService = game:GetService("HttpService")
 local CoreGui = game:GetService("CoreGui")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
 
 -- ป้องกันการเปิด GUI ซ้ำ
 if CoreGui:FindFirstChild("ValenAIDumperUI") then
@@ -223,7 +278,6 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ValenAIDumperUI"
 ScreenGui.ResetOnSpawn = false
 
--- ตรวจสอบ parent ให้เข้ากับ executor
 if syn and syn.protect_gui then
     syn.protect_gui(ScreenGui)
     ScreenGui.Parent = CoreGui
@@ -233,7 +287,6 @@ else
     ScreenGui.Parent = CoreGui
 end
 
--- Main Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 480, 0, 430)
@@ -262,9 +315,9 @@ local HeaderCorner = Instance.new("UICorner", Header)
 HeaderCorner.CornerRadius = UDim.new(0, 10)
 
 local Title = Instance.new("TextLabel")
-Title.Text = "⚡ VALEN AI DUMPER & REMOTE SPY"
+Title.Text = "⚡ VALEN AI DUMPER & REMOTE SPY (PRIVATE)"
 Title.Font = Enum.Font.GothamBold
-Title.TextSize = 14
+Title.TextSize = 13
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.Position = UDim2.new(0, 15, 0, 0)
 Title.Size = UDim2.new(0.7, 0, 1, 0)
@@ -273,10 +326,10 @@ Title.BackgroundTransparency = 1
 Title.Parent = Header
 
 local SubTitle = Instance.new("TextLabel")
-SubTitle.Text = "Universal Game Dumper for AI"
+SubTitle.Text = "User: " .. LocalPlayer.Name .. " | Private Access Granted"
 SubTitle.Font = Enum.Font.Gotham
 SubTitle.TextSize = 11
-SubTitle.TextColor3 = Color3.fromRGB(130, 140, 165)
+SubTitle.TextColor3 = Color3.fromRGB(0, 230, 160)
 SubTitle.Position = UDim2.new(0, 15, 0, 24)
 SubTitle.Size = UDim2.new(0.7, 0, 0, 16)
 SubTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -299,7 +352,7 @@ CloseBtn.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
 
--- Content Area
+-- Scroll Area
 local Container = Instance.new("ScrollingFrame")
 Container.Size = UDim2.new(1, -20, 1, -60)
 Container.Position = UDim2.new(0, 10, 0, 50)
@@ -323,7 +376,6 @@ StatusLabel.BackgroundTransparency = 1
 StatusLabel.LayoutOrder = 0
 StatusLabel.Parent = Container
 
--- Helper function to make UI cards
 local function createCard(titleText, descText, layoutOrder)
     local card = Instance.new("Frame")
     card.Size = UDim2.new(1, -6, 0, 95)
