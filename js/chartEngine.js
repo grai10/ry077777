@@ -43,6 +43,7 @@ class ChartEngine {
   setupEventListeners() {
     if (!this.canvas) return;
 
+    // Mouse Events
     this.canvas.addEventListener("mousemove", (e) => {
       const rect = this.canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -54,6 +55,37 @@ class ChartEngine {
     this.canvas.addEventListener("mouseleave", () => {
       this.hoverPos = null;
       this.render();
+    });
+
+    // Touch Events for iPad & iPhone
+    this.canvas.addEventListener("touchstart", (e) => {
+      if (e.touches && e.touches.length > 0) {
+        const rect = this.canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        this.hoverPos = { x, y };
+        this.render();
+      }
+    }, { passive: true });
+
+    this.canvas.addEventListener("touchmove", (e) => {
+      if (e.touches && e.touches.length > 0) {
+        const rect = this.canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        this.hoverPos = { x, y };
+        this.render();
+      }
+    }, { passive: true });
+
+    this.canvas.addEventListener("touchend", () => {
+      // Keep hoverPos for 2.5s on mobile or reset
+      setTimeout(() => {
+        this.hoverPos = null;
+        this.render();
+      }, 2500);
     });
   }
 

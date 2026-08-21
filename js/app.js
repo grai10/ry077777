@@ -257,6 +257,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Recalculate Risk Management
     updateRiskCalculator();
+
+    // On mobile, automatically switch to Chart & Plan tab
+    if (window.innerWidth <= 768) {
+      switchMobileTab("chartSection");
+    }
   }
 
   // 6. Update Risk Calculator Output
@@ -418,7 +423,43 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 14. Subscribe to Live Market Tick Simulation
+  // 14. Mobile Navigation Tab Switching for iPhone & iPad
+  const mobileNavBtns = document.querySelectorAll(".mobile-nav-btn");
+  const screenerSection = document.getElementById("screenerSection");
+  const chartSection = document.getElementById("chartSection");
+  const calculatorSection = document.getElementById("calculatorSection");
+
+  function switchMobileTab(targetId) {
+    if (window.innerWidth > 768) return; // Desktop / full layout
+    
+    // Hide all sections on mobile
+    if (screenerSection) screenerSection.classList.remove("mobile-active");
+    if (chartSection) chartSection.classList.remove("mobile-active");
+    if (calculatorSection) calculatorSection.classList.remove("mobile-active");
+
+    const targetEl = document.getElementById(targetId);
+    if (targetEl) targetEl.classList.add("mobile-active");
+
+    // Update bottom nav active state
+    mobileNavBtns.forEach(btn => {
+      if (btn.getAttribute("data-target") === targetId) btn.classList.add("active");
+      else btn.classList.remove("active");
+    });
+
+    // If switching to chart, trigger chart resize/render
+    if (targetId === "chartSection" && chart) {
+      setTimeout(() => chart.resizeCanvas(), 50);
+    }
+  }
+
+  mobileNavBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-target");
+      switchMobileTab(targetId);
+    });
+  });
+
+  // 15. Subscribe to Live Market Tick Simulation
   window.dataEngine.subscribe((stocks) => {
     // Keep list and hero updated if current stock ticked
     renderStockList();
@@ -441,8 +482,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 15. Initial Bootstrapping
+  // 16. Initial Bootstrapping & Mobile Setup
   renderTickerTape();
   renderStockList();
   selectStock("SOUN");
+
+  // Initial tab setup on mobile
+  if (window.innerWidth <= 768) {
+    switchMobileTab("chartSection");
+  }
+
+  // Handle window resize orientation change on iPad/iPhone
+  window.addEventListener("resize", () => {
+    if (window.innerWidth <= 768) {
+      const activeBtn = document.querySelector(".mobile-nav-btn.active");
+      const currentTarget = activeBtn ? activeBtn.getAttribute("data-target") : "chartSection";
+      switchMobileTab(currentTarget);
+    } else {
+      // Remove mobile classes on desktop/iPad landscape
+      if (screenerSection) screenerSection.classList.remove("mobile-active");
+      if (chartSection) chartSection.classList.remove("mobile-active");
+      if (calculatorSection) calculatorSection.classList.remove("mobile-active");
+    }
+    if (chart) chart.resizeCanvas();
+  });
 });

@@ -1114,3 +1114,234 @@ canvas#stockChart {
   transform: translateY(0);
   opacity: 1;
 }
+
+/* ==========================================================================
+   Mobile & iPad Bottom Navigation
+   ========================================================================== */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(14, 20, 36, 0.95);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-subtle);
+  padding: 8px 12px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  z-index: 900;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.5);
+}
+
+.mobile-nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  min-width: 80px;
+  min-height: 48px;
+  touch-action: manipulation;
+}
+
+.mobile-nav-btn .nav-icon {
+  font-size: 1.2rem;
+}
+
+.mobile-nav-btn .nav-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.mobile-nav-btn.active {
+  color: var(--color-cyan);
+  background: rgba(0, 210, 255, 0.12);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.15);
+}
+
+.mobile-nav-btn.active .nav-icon {
+  transform: scale(1.1);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints for iPad & iPhone
+   ========================================================================== */
+
+/* iPad Landscape & Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .terminal-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 12px;
+    padding-bottom: 30px;
+  }
+
+  .screener-panel {
+    grid-column: span 1;
+  }
+
+  .center-column {
+    grid-column: span 2;
+    order: -1; /* Place chart on top on iPad */
+  }
+
+  #calculatorSection {
+    grid-column: span 1;
+  }
+
+  .canvas-wrapper {
+    height: 380px;
+  }
+
+  .plan-levels-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* iPad Portrait & Large Phones (max-width: 768px) */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 75px; /* Space for Mobile Bottom Nav */
+  }
+
+  .mobile-bottom-nav {
+    display: flex;
+  }
+
+  .header-top {
+    padding: 10px 14px;
+  }
+
+  .brand-text h1 {
+    font-size: 0.95rem;
+  }
+
+  .brand-text p {
+    display: none;
+  }
+
+  .live-text {
+    display: inline;
+  }
+
+  .btn-text {
+    display: inline;
+  }
+
+  .terminal-container {
+    display: block;
+    padding: 10px;
+    padding-bottom: 80px;
+  }
+
+  /* Tab-based switching on mobile */
+  .screener-panel,
+  .center-column,
+  #calculatorSection {
+    display: none;
+    margin-bottom: 16px;
+  }
+
+  .screener-panel.mobile-active,
+  .center-column.mobile-active,
+  #calculatorSection.mobile-active {
+    display: flex;
+    animation: fadeInTab 0.25s ease;
+  }
+
+  @keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .stock-hero-card {
+    padding: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .hero-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .hero-symbol-block h2 {
+    font-size: 1.4rem;
+  }
+
+  .hero-current-price {
+    font-size: 1.4rem;
+  }
+
+  .hero-stats-grid {
+    width: 100%;
+    justify-content: space-between;
+    background: var(--bg-surface);
+    padding: 10px;
+    border-radius: var(--radius-md);
+  }
+
+  .verdict-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .canvas-wrapper {
+    height: 320px;
+  }
+
+  .plan-levels-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .plan-breakdown {
+    grid-template-columns: 1fr;
+  }
+
+  .preset-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .toast-notification {
+    bottom: 80px;
+    right: 14px;
+    left: 14px;
+    justify-content: center;
+  }
+}
+
+/* iPhone (max-width: 480px) */
+@media (max-width: 480px) {
+  .chart-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .timeframe-group, .indicator-group {
+    justify-content: center;
+  }
+
+  .plan-levels-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .level-price {
+    font-size: 1.15rem;
+  }
+
+  .btn {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+}
+

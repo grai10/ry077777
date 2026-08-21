@@ -2,9 +2,16 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Webull Momentum Sniper - เครื่องมือหาหุ้นซิ่ง & แผนเทรด SL/TP</title>
   <meta name="description" content="เครื่องมือสแกนหาหุ้นซิ่ง Webull คำนวณแนวรับแนวต้าน จุดเข้าซื้อ จุดตัดขาดทุน Stop Loss และจุดทำกำไร Take Profit อัตโนมัติ">
+  
+  <!-- Apple iOS / iPadOS Web App Support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="WebullSniper">
+  <meta name="theme-color" content="#070a12">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
@@ -18,18 +25,18 @@
       <div class="brand-section">
         <div class="brand-icon">⚡</div>
         <div class="brand-text">
-          <h1>WEBULL MOMENTUM SNIPER <span class="brand-tag">PRO V2.5</span></h1>
-          <p>ระบบสแกนหุ้นซิ่ง วางแผนจุดซื้อ แนวรับ-แนวต้าน SL และ TP ครบวงจร</p>
+          <h1>WEBULL SNIPER <span class="brand-tag">PRO</span></h1>
+          <p>ระบบสแกนหุ้นซิ่ง วางแผนจุดซื้อ SL/TP</p>
         </div>
       </div>
 
       <div class="header-actions">
         <div class="live-indicator">
           <div class="pulse-dot"></div>
-          <span>LIVE MARKET FEED</span>
+          <span class="live-text">LIVE</span>
         </div>
         <button id="exportBtn" class="btn btn-export">
-          📋 Export to Webull
+          📋 <span class="btn-text">Export Webull</span>
         </button>
       </div>
     </div>
@@ -46,7 +53,7 @@
   <main class="terminal-container">
     
     <!-- ========== LEFT COLUMN: SCREENER & WATCHLIST ========== -->
-    <aside class="panel-card screener-panel">
+    <aside id="screenerSection" class="panel-card screener-panel">
       <div class="card-header">
         <h2>🚀 Momentum Screener</h2>
       </div>
@@ -93,7 +100,7 @@
     </aside>
 
     <!-- ========== CENTER COLUMN: CHART & TRADE EXECUTION PLAN ========== -->
-    <section class="center-column">
+    <section id="chartSection" class="center-column">
       
       <!-- Stock Hero Card -->
       <div class="stock-hero-card">
@@ -236,7 +243,7 @@
     </section>
 
     <!-- ========== RIGHT COLUMN: RISK CALCULATOR & WEBULL PLAYBOOK ========== -->
-    <aside class="panel-card">
+    <aside id="calculatorSection" class="panel-card">
       <div class="card-header">
         <h2>🧮 Position Size & Risk</h2>
       </div>
@@ -318,6 +325,22 @@
     </aside>
 
   </main>
+
+  <!-- ==================== MOBILE & IPAD BOTTOM NAVIGATION ==================== -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav">
+    <button class="mobile-nav-btn" data-target="screenerSection">
+      <span class="nav-icon">🚀</span>
+      <span class="nav-label">Screener</span>
+    </button>
+    <button class="mobile-nav-btn active" data-target="chartSection">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Chart & Plan</span>
+    </button>
+    <button class="mobile-nav-btn" data-target="calculatorSection">
+      <span class="nav-icon">🧮</span>
+      <span class="nav-label">Risk Calc</span>
+    </button>
+  </nav>
 
   <!-- ==================== EXPORT TO WEBULL MODAL ==================== -->
   <div id="exportModal" class="modal-overlay">
